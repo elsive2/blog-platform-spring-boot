@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Post {
+public class Post implements AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

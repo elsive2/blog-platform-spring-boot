@@ -18,10 +18,11 @@ public class SecurityConfig {
     @Bean
     @ConditionalOnMissingBean(UserDetailsManager.class)
     InMemoryUserDetailsManager inMemoryUserDetailsManager() {
-        return new InMemoryUserDetailsManager(User.withUsername("user")
-                .password("{noop}password")
-                .roles("USER")
-                .build()
+        return new InMemoryUserDetailsManager(
+                User.withUsername("user")
+                    .password("{noop}password")
+                    .roles("USER")
+                    .build()
         );
     }
 
