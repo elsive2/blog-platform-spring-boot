@@ -1,9 +1,13 @@
+version: '3.9'
+
 services:
   postgres:
-    image: 'postgres:latest'
-    environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+    image: postgres:14-alpine
     ports:
-      - '5432'
+      - 5432:5432
+    volumes:
+      - ~/app/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=S3cret
+      - POSTGRES_USER=citizix_user
+      - POSTGRES_DB=citizix_db
