@@ -1,7 +1,12 @@
 package com.blog_platform.blog_platform_spring_boot.entity;
 
+import com.blog_platform.blog_platform_spring_boot.enums.PostStatusEnum;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "posts")
@@ -23,4 +28,24 @@ public class Post implements AbstractEntity {
 
     @Column(name = "content", nullable = false)
     private String content;
+
+    @Column(name = "publication_date", nullable = false, updatable = false)
+    private LocalDateTime publicationDate;
+
+    @Column(name = "modification_date")
+    private LocalDateTime modificationDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private PostStatusEnum status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @PrePersist
+    protected void onCreate() {
+        publicationDate = LocalDateTime.now();
+    }
+
 }

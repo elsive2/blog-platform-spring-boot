@@ -6,6 +6,7 @@ import com.blog_platform.blog_platform_spring_boot.entity.Post;
 import com.blog_platform.blog_platform_spring_boot.mapper.PostMapper;
 import com.blog_platform.blog_platform_spring_boot.repository.PostRepository;
 import com.blog_platform.blog_platform_spring_boot.response.PostResponse;
+import com.blog_platform.blog_platform_spring_boot.utils.UserUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,8 @@ public class PostService {
         post.setTitle(dto.getTitle());
         post.setDescription(dto.getDescription());
         post.setContent(dto.getContent());
+        post.setUser(UserUtils.getCurrentUser());
+        post.setStatus(dto.getStatus());
 
         postRepository.save(post);
 

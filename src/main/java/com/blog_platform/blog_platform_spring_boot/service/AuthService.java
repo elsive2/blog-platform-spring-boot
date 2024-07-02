@@ -24,7 +24,7 @@ public class AuthService {
         User user = new User();
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setUsername(dto.getUsername());
-
+        user.setEmail(dto.getEmail());
         userRepository.save(user);
 
         return userMapper.toResponse(user);
