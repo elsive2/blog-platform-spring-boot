@@ -11,6 +11,7 @@ public class UserMapper implements AbstractMapper<User, UserResponse> {
         UserResponse userResponse = new UserResponse();
         userResponse.setId(entity.getId());
         userResponse.setUsername(entity.getUsername());
+        userResponse.setEmail(entity.getEmail());
         userResponse.setRegistrationDate(entity.getRegistrationDate());
         return userResponse;
     }

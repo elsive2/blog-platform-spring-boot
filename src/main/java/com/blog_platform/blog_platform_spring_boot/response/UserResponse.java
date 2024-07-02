@@ -13,5 +13,7 @@ public class UserResponse implements AbstractResponse {
 
     private String username;
 
+    private String email;
+
     private LocalDateTime registrationDate;
 }

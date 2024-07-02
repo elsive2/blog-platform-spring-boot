@@ -39,6 +39,9 @@ public class User implements UserDetails, AbstractEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
+    @Column(name = "refresh_hash_code")
+    private String refreshHashCode;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList();

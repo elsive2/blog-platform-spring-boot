@@ -5,9 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class LoginResponse {
-    private String accessToken;
-
-    private String refreshToken;
+public class SuccessResponse {
+    private String message = "success";
 }
-

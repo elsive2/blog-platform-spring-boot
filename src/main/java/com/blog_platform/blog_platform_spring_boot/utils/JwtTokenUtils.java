@@ -20,8 +20,8 @@ public class JwtTokenUtils {
     @Value("${security.jwt.secret-key}")
     private String secretKey;
 
-    @Value("${security.jwt.expiration-time}")
-    private long jwtExpiration;
+    private static final long ACCESS_TOKEN_EXPIRATION = 1000 * 60 * 60;
+    private static final long REFRESH_TOKEN_EXPIRATION = 1000 * 60 * 60 * 24;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -32,16 +32,25 @@ public class JwtTokenUtils {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+
+    public String generateRefreshToken(String refreshHashCode, UserDetails userDetails) {
+        return buildToken(
+            Map.of("refreshHashCode", refreshHashCode),
+            userDetails,
+            REFRESH_TOKEN_EXPIRATION
+        );
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
-        return buildToken(extraClaims, userDetails, jwtExpiration);
+    public String generateAccessToken(UserDetails userDetails) {
+        return generateAccessToken(new HashMap<>(), userDetails);
+    }
+
+    public String generateAccessToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        return buildToken(extraClaims, userDetails, ACCESS_TOKEN_EXPIRATION);
     }
 
     public long getExpirationTime() {
-        return jwtExpiration;
+        return ACCESS_TOKEN_EXPIRATION;
     }
 
     private String buildToken(
