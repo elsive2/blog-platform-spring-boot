@@ -5,9 +5,9 @@ import com.blog_platform.blog_platform_spring_boot.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,10 +20,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final UserRepository userRepository;
     private final JwtTokenFilter jwtTokenFilter;
+
 
     public SecurityConfig(UserRepository userRepository, @Lazy JwtTokenFilter jwtTokenFilter) {
         this.userRepository = userRepository;
@@ -33,10 +35,10 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository
-                .findByUsername(username)
-                .orElseThrow(
-                    () -> new RuntimeException("User not found")
-                );
+            .findByUsername(username)
+            .orElseThrow(
+                () -> new RuntimeException("User not found")
+            );
     }
 
     @Bean
@@ -56,7 +58,6 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/users/me").authenticated()
-                    .requestMatchers(HttpMethod.POST, "/posts").authenticated()
                     .anyRequest().permitAll()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

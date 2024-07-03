@@ -1,1 +1,0 @@
-ALTER TABLE users ADD COLUMN refresh_hash_code VARCHAR(255) NOT NULL;

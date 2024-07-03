@@ -1,5 +1,6 @@
 package com.blog_platform.blog_platform_spring_boot.entity;
 
+import com.blog_platform.blog_platform_spring_boot.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -42,9 +42,13 @@ public class User implements UserDetails, AbstractEntity {
     @Column(name = "refresh_hash_code")
     private String refreshHashCode;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private RoleEnum role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        return role.getAuthorities();
     }
 
     @Override

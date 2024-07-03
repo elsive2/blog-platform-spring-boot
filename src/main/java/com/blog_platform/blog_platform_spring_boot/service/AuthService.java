@@ -3,6 +3,7 @@ package com.blog_platform.blog_platform_spring_boot.service;
 import com.blog_platform.blog_platform_spring_boot.dto.user.LoginUserDto;
 import com.blog_platform.blog_platform_spring_boot.dto.user.RegisterUserDto;
 import com.blog_platform.blog_platform_spring_boot.entity.User;
+import com.blog_platform.blog_platform_spring_boot.enums.RoleEnum;
 import com.blog_platform.blog_platform_spring_boot.mapper.UserMapper;
 import com.blog_platform.blog_platform_spring_boot.repository.UserRepository;
 import com.blog_platform.blog_platform_spring_boot.response.LoginResponse;
@@ -32,6 +33,7 @@ public class AuthService {
         user.setUsername(dto.getUsername());
         user.setEmail(dto.getEmail());
         user.setRefreshHashCode(StringUtils.generateRandomString(32));
+        user.setRole(RoleEnum.USER);
 
         userRepository.save(user);
 
