@@ -5,6 +5,7 @@ import com.blog_platform.blog_platform_spring_boot.dto.user.RegisterUserDto;
 import com.blog_platform.blog_platform_spring_boot.entity.User;
 import com.blog_platform.blog_platform_spring_boot.enums.RoleEnum;
 import com.blog_platform.blog_platform_spring_boot.exception.RefreshTokenExpiredException;
+import com.blog_platform.blog_platform_spring_boot.exception.SuchUserAlreadyExistsException;
 import com.blog_platform.blog_platform_spring_boot.exception.UserNotFoundException;
 import com.blog_platform.blog_platform_spring_boot.mapper.UserMapper;
 import com.blog_platform.blog_platform_spring_boot.repository.UserRepository;
@@ -28,6 +29,10 @@ public class AuthService {
     private final JwtTokenUtils jwtTokenUtils;
 
     public UserResponse signUp(final RegisterUserDto dto) {
+        if (userRepository.findByUsername(dto.getUsername()).isPresent()) {
+            throw new SuchUserAlreadyExistsException();
+        }
+
         User user = new User();
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setUsername(dto.getUsername());
