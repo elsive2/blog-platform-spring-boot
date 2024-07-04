@@ -77,4 +77,8 @@ public class PostService {
 
         postRepository.delete(postOptional.get());
     }
+
+    public boolean isPostAuthor(final long id, final String username) {
+        return postRepository.findByIdAndUserUsername(id, username).isPresent();
+    }
 }

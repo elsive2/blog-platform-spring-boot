@@ -19,31 +19,29 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    @PreAuthorize("hasAuthority('post:read')")
     ResponseEntity<List<PostResponse>> index() {
         return ResponseEntity.ok(postService.getAll());
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('post:read')")
     ResponseEntity<PostResponse> view(@PathVariable final long id) {
         return ResponseEntity.ok(postService.getById(id));
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('post:create')")
+    @PreAuthorize("isAuthenticated()")
     ResponseEntity<PostResponse> create(@RequestBody final PostCreateDto dto) {
         return ResponseEntity.ok(postService.create(dto));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('post:update')")
+    @PreAuthorize("isAuthenticated() && @postService.isPostAuthor(#id, authentication.name)")
     ResponseEntity<PostResponse> update(@RequestBody final PostUpdateDto dto, @PathVariable final long id) {
         return ResponseEntity.ok(postService.update(dto, id));
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAuthority('post:delete')")
+    @PreAuthorize("isAuthenticated() && @postService.isPostAuthor(#id, authentication.name)")
     ResponseEntity<String> delete(@PathVariable final long id) {
         postService.delete(id);
 
