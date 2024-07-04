@@ -1,6 +1,7 @@
 package com.blog_platform.blog_platform_spring_boot.utils;
 
 import com.blog_platform.blog_platform_spring_boot.entity.User;
+import com.blog_platform.blog_platform_spring_boot.exception.UnauthorizedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -12,7 +13,7 @@ public class UserUtils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) {
-            throw new RuntimeException("Authentication not found");
+            throw new UnauthorizedException();
         }
         return (User) authentication.getPrincipal();
     }

@@ -4,6 +4,7 @@ import com.blog_platform.blog_platform_spring_boot.dto.post.PostCreateDto;
 import com.blog_platform.blog_platform_spring_boot.dto.post.PostUpdateDto;
 import com.blog_platform.blog_platform_spring_boot.response.PostResponse;
 import com.blog_platform.blog_platform_spring_boot.service.PostService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,13 +31,13 @@ public class PostController {
 
     @PostMapping
     @PreAuthorize("isAuthenticated()")
-    ResponseEntity<PostResponse> create(@RequestBody final PostCreateDto dto) {
+    ResponseEntity<PostResponse> create(@RequestBody @Valid final PostCreateDto dto) {
         return ResponseEntity.ok(postService.create(dto));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("isAuthenticated() && @postService.isPostAuthor(#id, authentication.name)")
-    ResponseEntity<PostResponse> update(@RequestBody final PostUpdateDto dto, @PathVariable final long id) {
+    ResponseEntity<PostResponse> update(@RequestBody @Valid final PostUpdateDto dto, @PathVariable final long id) {
         return ResponseEntity.ok(postService.update(dto, id));
     }
 

@@ -4,6 +4,8 @@ import com.blog_platform.blog_platform_spring_boot.dto.user.LoginUserDto;
 import com.blog_platform.blog_platform_spring_boot.dto.user.RegisterUserDto;
 import com.blog_platform.blog_platform_spring_boot.entity.User;
 import com.blog_platform.blog_platform_spring_boot.enums.RoleEnum;
+import com.blog_platform.blog_platform_spring_boot.exception.RefreshTokenExpiredException;
+import com.blog_platform.blog_platform_spring_boot.exception.UserNotFoundException;
 import com.blog_platform.blog_platform_spring_boot.mapper.UserMapper;
 import com.blog_platform.blog_platform_spring_boot.repository.UserRepository;
 import com.blog_platform.blog_platform_spring_boot.response.LoginResponse;
@@ -15,8 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -49,7 +49,7 @@ public class AuthService {
         );
 
         User user = userRepository.findByUsername(dto.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(UserNotFoundException::new);
 
         user.setRefreshHashCode(StringUtils.generateRandomString(32));
         userRepository.save(user);
@@ -62,7 +62,7 @@ public class AuthService {
 
     public LoginResponse refresh(final String token) {
         if (!jwtTokenUtils.isTokenValid(token)) {
-            throw new RuntimeException("Refresh token expired");
+            throw new RefreshTokenExpiredException();
         }
 
         final String refreshHashCode = jwtTokenUtils.extractClaim(
@@ -70,13 +70,9 @@ public class AuthService {
         );
         final String username = jwtTokenUtils.extractUsername(token);
 
-        final Optional<User> optionalUser = userRepository.findByRefreshHashCodeAndUsername(refreshHashCode, username);
+        final User user = userRepository.findByRefreshHashCodeAndUsername(refreshHashCode, username)
+            .orElseThrow(UserNotFoundException::new);
 
-        if (optionalUser.isEmpty()) {
-            throw new RuntimeException("User not found");
-        }
-
-        User user = optionalUser.get();
         user.setRefreshHashCode(StringUtils.generateRandomString(32));
 
         userRepository.save(user);

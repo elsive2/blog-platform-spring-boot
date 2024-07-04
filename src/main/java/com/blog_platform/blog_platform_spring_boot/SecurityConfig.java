@@ -1,5 +1,6 @@
 package com.blog_platform.blog_platform_spring_boot;
 
+import com.blog_platform.blog_platform_spring_boot.exception.UserNotFoundException;
 import com.blog_platform.blog_platform_spring_boot.filter.JwtTokenFilter;
 import com.blog_platform.blog_platform_spring_boot.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
@@ -36,9 +37,7 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         return username -> userRepository
             .findByUsername(username)
-            .orElseThrow(
-                () -> new RuntimeException("User not found")
-            );
+            .orElseThrow(UserNotFoundException::new);
     }
 
     @Bean
