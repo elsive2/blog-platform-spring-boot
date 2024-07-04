@@ -10,10 +10,10 @@ import com.blog_platform.blog_platform_spring_boot.repository.PostRepository;
 import com.blog_platform.blog_platform_spring_boot.response.PostResponse;
 import com.blog_platform.blog_platform_spring_boot.utils.UserUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -21,11 +21,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
 
-    public List<PostResponse> getAll() {
-        return postRepository.findAll()
-                .stream()
-                .map(postMapper::toResponse)
-                .toList();
+    public Page<PostResponse> getAll(Pageable pageable) {
+        return postRepository.findAll(pageable).map(postMapper::toResponse);
     }
 
     public PostResponse getById(final long id) {

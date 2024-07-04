@@ -71,7 +71,7 @@ public class AuthService {
         }
 
         final String refreshHashCode = jwtTokenUtils.extractClaim(
-            token, claim -> claim.get("refreshHashCode", String.class)
+            token, (claim) -> claim.get("refreshHashCode", String.class)
         );
         final String username = jwtTokenUtils.extractUsername(token);
 

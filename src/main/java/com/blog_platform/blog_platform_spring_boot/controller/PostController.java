@@ -6,11 +6,11 @@ import com.blog_platform.blog_platform_spring_boot.response.PostResponse;
 import com.blog_platform.blog_platform_spring_boot.service.PostService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -20,8 +20,8 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
-    ResponseEntity<List<PostResponse>> index() {
-        return ResponseEntity.ok(postService.getAll());
+    ResponseEntity<Page<PostResponse>> index(Pageable pageable) {
+        return ResponseEntity.ok(postService.getAll(pageable));
     }
 
     @GetMapping("/{id}")
